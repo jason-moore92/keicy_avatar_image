@@ -15,6 +15,7 @@ class KeicyAvatarImage extends StatelessWidget {
   final double elevation;
   final int letters;
   final File image;
+  final String heroTag;
   KeicyAvatarImage({
     @required this.url,
     @required this.userName,
@@ -25,6 +26,7 @@ class KeicyAvatarImage extends StatelessWidget {
     this.elevation = 0.0,
     this.letters = 2,
     this.image,
+    this.heroTag,
   });
 
   @override
@@ -34,7 +36,7 @@ class KeicyAvatarImage extends StatelessWidget {
       color: Colors.white,
       shape: CircleBorder(),
       child: Hero(
-        tag: "avatar_profile",
+        tag: heroTag ?? "avatar_profile",
         child: Padding(
           padding: EdgeInsets.all(borderWidth),
           child: (image == null)
