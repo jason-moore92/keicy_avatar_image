@@ -42,7 +42,7 @@ class KeicyAvatarImage extends StatelessWidget {
         tag: heroTag ?? "avatar_profile",
         child: Padding(
           padding: EdgeInsets.all(borderWidth),
-          child: (image == null)
+          child: (image != null)
               ? KeicyNetworkImage(
                   url: url,
                   height: width,
