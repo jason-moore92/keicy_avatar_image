@@ -36,45 +36,48 @@ class KeicyAvatarImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget widget = Padding(
+      padding: EdgeInsets.all(borderWidth),
+      child: (image == null)
+          ? KeicyNetworkImage(
+              url: url,
+              height: width,
+              width: height,
+              borderRadius: borderRadius ?? width / 2,
+              errorWidget: Container(
+                height: width,
+                width: height,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
+                  color: backColor ?? Colors.grey[200],
+                ),
+                child: Center(
+                  child: Text(
+                    userName != "" ? userName.substring(0, letters).toUpperCase() : "U",
+                    style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            )
+          : Container(
+              height: width,
+              width: height,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
+                image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
+              ),
+            ),
+    );
     return Material(
       elevation: elevation,
       color: Colors.white,
       shape: CircleBorder(),
-      child: Hero(
-        tag: heroTag ?? "avatar_profile",
-        child: Padding(
-          padding: EdgeInsets.all(borderWidth),
-          child: (image == null)
-              ? KeicyNetworkImage(
-                  url: url,
-                  height: width,
-                  width: height,
-                  borderRadius: borderRadius ?? width / 2,
-                  errorWidget: Container(
-                    height: width,
-                    width: height,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
-                      color: backColor ?? Colors.grey[200],
-                    ),
-                    child: Center(
-                      child: Text(
-                        userName != "" ? userName.substring(0, letters).toUpperCase() : "U",
-                        style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                )
-              : Container(
-                  height: width,
-                  width: height,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
-                    image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
-                  ),
-                ),
-        ),
-      ),
+      child: heroTag == null
+          ? widget
+          : Hero(
+              tag: heroTag,
+              child: widget,
+            ),
     );
   }
 }
