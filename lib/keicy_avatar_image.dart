@@ -17,6 +17,7 @@ class KeicyAvatarImage extends StatelessWidget {
   final int letters;
   final File image;
   final String heroTag;
+  final Color backColor;
 
   KeicyAvatarImage({
     @required this.url,
@@ -30,6 +31,7 @@ class KeicyAvatarImage extends StatelessWidget {
     this.letters = 2,
     this.image,
     this.heroTag,
+    this.backColor,
   });
 
   @override
@@ -53,7 +55,7 @@ class KeicyAvatarImage extends StatelessWidget {
                     width: height,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
-                      color: Colors.grey[200],
+                      color: backColor ?? Colors.grey[200],
                     ),
                     child: Center(
                       child: Text(
