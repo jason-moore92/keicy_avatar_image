@@ -11,17 +11,20 @@ class KeicyAvatarImage extends StatelessWidget {
   final double width;
   final double height;
   final double borderWidth;
+  final double borderRadius;
   final double fontSize;
   final double elevation;
   final int letters;
   final File image;
   final String heroTag;
+
   KeicyAvatarImage({
     @required this.url,
     @required this.userName,
     this.width = 70.0,
     this.height = 70.0,
     this.borderWidth = 0.0,
+    this.borderRadius,
     this.fontSize = 20.0,
     this.elevation = 0.0,
     this.letters = 2,
@@ -44,12 +47,12 @@ class KeicyAvatarImage extends StatelessWidget {
                   url: url,
                   height: width,
                   width: height,
-                  borderRadius: width / 2,
+                  borderRadius: borderRadius ?? width / 2,
                   errorWidget: SizedBox(
                     height: width,
                     width: height,
                     child: CircleAvatar(
-                      radius: width / 2,
+                      radius: borderRadius ?? width / 2,
                       backgroundColor: Colors.grey[200],
                       child: Text(
                         userName != "" ? userName.substring(0, letters).toUpperCase() : "U",
@@ -62,7 +65,7 @@ class KeicyAvatarImage extends StatelessWidget {
                   height: width,
                   width: height,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(width / 2),
+                    borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
                     image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
                   ),
                 ),
