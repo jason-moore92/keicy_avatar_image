@@ -42,18 +42,20 @@ class KeicyAvatarImage extends StatelessWidget {
         tag: heroTag ?? "avatar_profile",
         child: Padding(
           padding: EdgeInsets.all(borderWidth),
-          child: (image != null)
+          child: (image == null)
               ? KeicyNetworkImage(
                   url: url,
                   height: width,
                   width: height,
                   borderRadius: borderRadius ?? width / 2,
-                  errorWidget: SizedBox(
+                  errorWidget: Container(
                     height: width,
                     width: height,
-                    child: CircleAvatar(
-                      radius: borderRadius ?? width / 2,
-                      backgroundColor: Colors.grey[200],
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
+                      color: Colors.grey[200],
+                    ),
+                    child: Center(
                       child: Text(
                         userName != "" ? userName.substring(0, letters).toUpperCase() : "U",
                         style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
