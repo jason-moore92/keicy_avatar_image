@@ -18,21 +18,22 @@ class KeicyAvatarImage extends StatelessWidget {
   final File image;
   final String heroTag;
   final Color backColor;
+  final Color textColor;
 
-  KeicyAvatarImage({
-    @required this.url,
-    @required this.userName,
-    this.width = 70.0,
-    this.height = 70.0,
-    this.borderWidth = 0.0,
-    this.borderRadius,
-    this.fontSize = 20.0,
-    this.elevation = 0.0,
-    this.letters = 2,
-    this.image,
-    this.heroTag,
-    this.backColor,
-  });
+  KeicyAvatarImage(
+      {@required this.url,
+      @required this.userName,
+      this.width = 70.0,
+      this.height = 70.0,
+      this.borderWidth = 0.0,
+      this.borderRadius,
+      this.fontSize = 20.0,
+      this.elevation = 0.0,
+      this.letters = 2,
+      this.image,
+      this.heroTag,
+      this.backColor,
+      this.textColor = Colors.black});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class KeicyAvatarImage extends StatelessWidget {
                 child: Center(
                   child: Text(
                     userName != "" ? userName.substring(0, letters).toUpperCase() : "U",
-                    style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
                   ),
                 ),
               ),
