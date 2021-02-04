@@ -47,14 +47,14 @@ class KeicyAvatarImage extends StatelessWidget {
       child: (image == null)
           ? KeicyNetworkImage(
               url: url,
-              height: width,
-              width: height,
+              width: width,
+              height: height,
               borderRadius: borderRadius ?? width / 2,
               borderColor: Colors.transparent,
               borderWidth: 0,
               errorWidget: Container(
-                height: width,
-                width: height,
+                width: width,
+                height: height,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
                   color: backColor ?? Colors.grey[200],
@@ -68,8 +68,8 @@ class KeicyAvatarImage extends StatelessWidget {
               ),
             )
           : Container(
-              height: width,
-              width: height,
+              width: width,
+              height: height,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
                 image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
