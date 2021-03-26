@@ -12,9 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  keicy_network_image:
-    git: https://github.com/FlutterDev6778/keicy_network_image.git
-
+  shimmer: ^1.1.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

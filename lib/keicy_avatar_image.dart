@@ -2,90 +2,205 @@ library keicy_avatar_image;
 
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:keicy_network_image/keicy_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
-class KeicyAvatarImage extends StatelessWidget {
+class KeicyAvatarImage extends StatefulWidget {
+  KeicyAvatarImage({
+    Key key,
+    @required this.url,
+    this.shimmerEnable = false,
+    this.width = 70.0,
+    this.height = 70.0,
+    this.userName,
+    this.textStyle,
+    this.fit = BoxFit.cover,
+    this.borderWidth = 0.0,
+    this.borderRadius = 0,
+    this.elevation = 0.0,
+    this.letters = 2,
+    this.imageFile,
+    this.heroTag,
+    this.backColor,
+    this.borderColor = Colors.transparent,
+    this.shimmerLoading = true,
+    this.baseColor,
+    this.highlightColor,
+    this.errorColor,
+    this.color,
+    this.colorBlendMode,
+  }) : super(key: key);
+
   final String url;
-  final String userName;
+  final bool shimmerEnable;
   final double width;
   final double height;
+  final String userName;
+  final TextStyle textStyle;
+  final BoxFit fit;
   final double borderWidth;
   final double borderRadius;
-  final TextStyle textStyle;
-  final double fontSize;
-  final Color textColor;
   final double elevation;
   final int letters;
-  final File image;
+  final File imageFile;
   final String heroTag;
   final Color backColor;
   final Color borderColor;
+  final bool shimmerLoading;
+  final Color baseColor;
+  final Color highlightColor;
+  Widget loadingWidget;
+  Widget errorWidget;
+  final Color errorColor;
+  final Color color;
+  final BlendMode colorBlendMode;
+  double indicatorSize;
 
-  KeicyAvatarImage({
-    @required this.url,
-    @required this.userName,
-    this.width = 70.0,
-    this.height = 70.0,
-    this.borderWidth = 0.0,
-    this.borderRadius,
-    this.elevation = 0.0,
-    this.letters = 2,
-    this.image,
-    this.heroTag,
-    this.backColor,
-    this.fontSize = 20.0,
-    this.textColor = Colors.black,
-    this.textStyle,
-    this.borderColor = Colors.transparent,
-  });
+  @override
+  _KeicyAvatarImageState createState() => _KeicyAvatarImageState();
+}
+
+class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
+  Image image;
+  Widget shimmerWidget;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (image != null) {
+      precacheImage(image.image, context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget widget = Padding(
-      padding: EdgeInsets.all(borderWidth),
-      child: (image == null)
-          ? KeicyNetworkImage(
-              url: url,
-              width: width,
-              height: height,
-              borderRadius: borderRadius ?? width / 2,
-              borderColor: Colors.transparent,
-              borderWidth: 0,
-              errorWidget: Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
-                  color: backColor ?? Colors.grey[200],
-                ),
-                child: Center(
-                  child: Text(
-                    userName != "" ? userName.substring(0, letters).toUpperCase() : "U",
-                    style: textStyle ?? TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
-                  ),
-                ),
-              ),
-            )
-          : Container(
-              width: width,
-              height: height,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius ?? width / 2),
-                image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
-              ),
+    if (widget.indicatorSize != null)
+      widget.indicatorSize = widget.indicatorSize ?? (widget.height != null)
+          ? widget.height / 5
+          : (widget.width != null)
+              ? widget.width / 5
+              : 20;
+
+    shimmerWidget = Shimmer.fromColors(
+      child: Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(widget.borderRadius), color: Colors.white),
+      ),
+      baseColor: widget.baseColor ?? Colors.grey[300],
+      highlightColor: widget.highlightColor ?? Colors.grey[100],
+      direction: ShimmerDirection.ltr,
+      period: Duration(milliseconds: 1000),
+    );
+
+    widget.loadingWidget = Container(
+      width: widget.width,
+      height: widget.height,
+      decoration: BoxDecoration(
+        color: widget.backColor,
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      ),
+      child: widget.shimmerLoading
+          ? shimmerWidget
+          : Center(
+              child: (widget.loadingWidget ?? CupertinoActivityIndicator()),
             ),
     );
-    return Material(
-      elevation: elevation,
-      color: borderColor,
-      shape: CircleBorder(),
-      child: heroTag == null
-          ? widget
-          : Hero(
-              tag: heroTag,
-              child: widget,
+
+    widget.errorWidget = (widget.userName == null
+        ? Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: widget.backColor,
+              borderRadius: BorderRadius.circular(widget.borderRadius),
             ),
+            child: Center(
+              child: widget.errorWidget ?? Icon(Icons.not_interested, size: widget.indicatorSize, color: widget.errorColor),
+            ),
+          )
+        : Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: widget.backColor,
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+            ),
+            child: Center(
+              child: Text(widget.userName.substring(0, 2), style: widget.textStyle),
+            ),
+          ));
+
+    image = (widget.imageFile != null)
+        ? Image.file(
+            widget.imageFile,
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+            color: widget.color,
+            colorBlendMode: widget.colorBlendMode,
+            filterQuality: FilterQuality.low,
+            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+              return widget.errorWidget;
+            },
+          )
+        : Image.network(
+            widget.url,
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+            // color: widget.color,
+            // colorBlendMode: widget.colorBlendMode,
+            filterQuality: FilterQuality.low,
+            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              }
+              return widget.loadingWidget;
+            },
+            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+              return widget.errorWidget;
+            },
+          );
+
+    Widget imageWidget = Padding(
+      padding: EdgeInsets.all(widget.borderWidth),
+      child: widget.shimmerEnable
+          ? shimmerWidget
+          : (widget.url == "" || widget.url == null)
+              ? widget.errorWidget
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  child: image,
+                ),
+    );
+
+    return Material(
+      elevation: widget.elevation,
+      color: widget.borderColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      ),
+      child: Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+        ),
+        child: widget.heroTag == null
+            ? imageWidget
+            : Hero(
+                tag: widget.heroTag,
+                child: imageWidget,
+              ),
+      ),
     );
   }
 }
