@@ -28,6 +28,7 @@ class KeicyAvatarImage extends StatefulWidget {
     this.baseColor,
     this.highlightColor,
     this.errorColor,
+    this.errorWidget,
     this.color,
     this.colorBlendMode,
   }) : super(key: key);
@@ -62,7 +63,7 @@ class KeicyAvatarImage extends StatefulWidget {
 }
 
 class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
-  Image image;
+  Widget image;
   Widget shimmerWidget;
 
   @override
@@ -70,14 +71,14 @@ class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
 
-    if (image != null) {
-      precacheImage(image.image, context);
-    }
-  }
+  //   if (image != null) {
+  //     precacheImage(image.image, context);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +115,7 @@ class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
             ),
     );
 
-    widget.errorWidget = (widget.userName == null
+    widget.errorWidget = widget.userName == null
         ? Container(
             width: widget.width,
             height: widget.height,
@@ -134,9 +135,9 @@ class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
               borderRadius: BorderRadius.circular(widget.borderRadius),
             ),
             child: Center(
-              child: Text(widget.userName.substring(0, 2), style: widget.textStyle),
+              child: Text(widget.userName == "" ? "" : widget.userName.substring(0, 2), style: widget.textStyle),
             ),
-          ));
+          );
 
     image = (widget.imageFile != null)
         ? Image.file(
@@ -151,35 +152,37 @@ class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
               return widget.errorWidget;
             },
           )
-        : Image.network(
-            widget.url,
-            width: widget.width,
-            height: widget.height,
-            fit: widget.fit,
-            // color: widget.color,
-            // colorBlendMode: widget.colorBlendMode,
-            filterQuality: FilterQuality.low,
-            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-              if (loadingProgress == null) {
-                return child;
-              }
-              return widget.loadingWidget;
-            },
-            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-              return widget.errorWidget;
-            },
-          );
+        : (widget.url != null && widget.url != "")
+            ? Image.network(
+                widget.url,
+                width: widget.width,
+                height: widget.height,
+                fit: widget.fit,
+                // color: widget.color,
+                // colorBlendMode: widget.colorBlendMode,
+                filterQuality: FilterQuality.low,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return widget.loadingWidget;
+                },
+                errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                  return widget.errorWidget;
+                },
+              )
+            : widget.errorWidget;
 
     Widget imageWidget = Padding(
       padding: EdgeInsets.all(widget.borderWidth),
       child: widget.shimmerEnable
           ? shimmerWidget
-          : (widget.url == "" || widget.url == null)
-              ? widget.errorWidget
-              : ClipRRect(
+          : (widget.imageFile != null || (widget.url != "" && widget.url != null))
+              ? ClipRRect(
                   borderRadius: BorderRadius.circular(widget.borderRadius),
                   child: image,
-                ),
+                )
+              : widget.errorWidget,
     );
 
     return Material(
