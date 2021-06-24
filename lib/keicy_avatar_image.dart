@@ -22,7 +22,7 @@ class KeicyAvatarImage extends StatefulWidget {
     this.letters = 2,
     this.imageFile,
     this.heroTag,
-    this.backColor,
+    this.backColor = Colors.white,
     this.borderColor = Colors.transparent,
     this.shimmerLoading = true,
     this.baseColor,
@@ -195,6 +195,7 @@ class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
         width: widget.width,
         height: widget.height,
         decoration: BoxDecoration(
+          color: widget.backColor,
           borderRadius: BorderRadius.circular(widget.borderRadius),
         ),
         child: widget.heroTag == null
