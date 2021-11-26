@@ -11,8 +11,8 @@ class KeicyAvatarImage extends StatefulWidget {
     Key? key,
     @required this.url,
     this.shimmerEnable = false,
-    this.width = 70.0,
-    this.height = 70.0,
+    this.width,
+    this.height,
     this.userName,
     this.textStyle,
     this.fit = BoxFit.cover,
@@ -85,8 +85,8 @@ class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
 
     shimmerWidget = Shimmer.fromColors(
       child: Container(
-        width: widget.width,
-        height: widget.height,
+        width: widget.width ?? widget.height,
+        height: widget.height ?? widget.width,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(widget.borderRadius!), color: Colors.white),
       ),
       baseColor: widget.baseColor ?? Colors.grey[300]!,
