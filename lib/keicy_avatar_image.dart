@@ -155,8 +155,8 @@ class _KeicyAvatarImageState extends State<KeicyAvatarImage> {
                 width: widget.width,
                 height: widget.height,
                 fit: widget.fit,
-                // color: widget.color,
-                // colorBlendMode: widget.colorBlendMode,
+                color: widget.color,
+                colorBlendMode: widget.colorBlendMode,
                 filterQuality: FilterQuality.low,
                 loadingBuilder: (BuildContext? context, Widget? child, ImageChunkEvent? loadingProgress) {
                   if (loadingProgress == null) {
